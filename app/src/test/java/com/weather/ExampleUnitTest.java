@@ -1,4 +1,4 @@
-package kirysue.weather;
+package com.weather;
 
 import org.junit.Test;
 
