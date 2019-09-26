@@ -2,13 +2,12 @@ package com.weather.ui.animation;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.weather.ui.activities.HomeActivity;
+import com.weather.ui.fragments.slideInfoActivity;
 
 public class ProgressBarAnimation extends Animation {
 
@@ -34,7 +33,7 @@ public class ProgressBarAnimation extends Animation {
         textView.setText((int)value + " %");
 
         if(value == to){
-            context.startActivity(new Intent(context, HomeActivity.class));
+            context.startActivity(new Intent(context, slideInfoActivity.class));
         }
     }
 
