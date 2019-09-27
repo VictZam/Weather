@@ -63,4 +63,5 @@ public class slideInfoActivity extends AppIntro {
     public void onSlideChanged() {
         Toast.makeText(this, "On Skip Changed", Toast.LENGTH_SHORT).show();
     }
+
 }
