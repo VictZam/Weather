@@ -2,6 +2,7 @@ package com.weather.data.db;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmObject;
@@ -48,5 +49,18 @@ public class WeatherLocation extends RealmObject {
 
     public void setWeather(RealmList<Weather> weather) {
         this.weather = weather;
+    }
+
+
+    public void deleteCascadeWeatherLocation(WeatherLocation weatherLocation){
+        if(weatherLocation != null) {
+            new Request().deleteRequest(weatherLocation.getRequest());
+            new Weather().deleteWeather(weatherLocation.getWeather());
+            new CurrentCondition().deleteCurrentCondition(weatherLocation.getCurrentCondition());
+            
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realmQuerry -> weatherLocation.deleteFromRealm());
+            }
+        }
     }
 }

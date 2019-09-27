@@ -45,27 +45,17 @@ public class WeatherApi {
 
                         try (Realm realm = Realm.getDefaultInstance()) {
                             weatherLocations.setLocality(locality);
-                            realm.executeTransaction(realmQuerry -> {
-                                WeatherLocation weatherRegisterLocation = realmQuerry
-                                        .where(WeatherLocation.class)
-                                        .equalTo("locality", locality)
-                                        .findFirst();
 
-                                if(weatherRegisterLocation != null) {
-                                    for(int i = 0; i < weatherRegisterLocation.getRequest().size(); i++) {
-                                        weatherRegisterLocation.getRequest().get(i).deleteFromRealm();
-                                    }
-                                    for(int i = 0; i < weatherRegisterLocation.getWeather().size(); i++) {
-                                        weatherRegisterLocation.getWeather().get(i).deleteFromRealm();
-                                    }
-                                    for(int i = 0; i < weatherRegisterLocation.getCurrentCondition().size(); i++) {
-                                        weatherRegisterLocation.getCurrentCondition().get(i).deleteFromRealm();
-                                    }
-                                        weatherRegisterLocation.deleteFromRealm();
-                                }
+                            WeatherLocation weatherRegisterLocation = realm
+                                    .where(WeatherLocation.class)
+                                    .equalTo("locality", locality)
+                                    .findFirst();
 
-                                realmQuerry.insertOrUpdate(weatherLocations);
-                            });
+                            if(weatherRegisterLocation != null) {
+                                weatherRegisterLocation.deleteCascadeWeatherLocation(weatherRegisterLocation);
+                            }
+
+                            realm.executeTransaction(realmQuerry -> realmQuerry.insertOrUpdate(weatherLocations));
 
                         }
 

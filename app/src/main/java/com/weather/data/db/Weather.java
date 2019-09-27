@@ -2,6 +2,7 @@ package com.weather.data.db;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
@@ -126,5 +127,18 @@ public class Weather extends RealmObject {
 
     public void setHourly(RealmList<Hourly> hourly) {
         this.hourly = hourly;
+    }
+
+
+    public void deleteWeather(RealmList<Weather> weathers) {
+        if (weathers.size() != 0) {
+            for(Weather weather : weathers){
+                new Hourly().deleteHourly(weather.getHourly());
+            }
+
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realmQuerry -> weathers.deleteAllFromRealm());
+            }
+        }
     }
 }

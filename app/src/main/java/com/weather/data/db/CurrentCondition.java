@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
@@ -217,5 +218,19 @@ public class CurrentCondition extends RealmObject {
 
     public void setUvIndex(int uvIndex) {
         this.uvIndex = uvIndex;
+    }
+
+
+    public void deleteCurrentCondition(RealmList<CurrentCondition> currentConditions) {
+        if (currentConditions.size() != 0) {
+            for(CurrentCondition currentCondition : currentConditions){
+                new WeatherIconUrl().deleteWeatherIconUrls(currentCondition.getWeatherIconUrl());
+                new WeatherDesc().deleteWeatherDesc(currentCondition.getWeatherDesc());
+            }
+
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realmQuerry -> currentConditions.deleteAllFromRealm());
+            }
+        }
     }
 }
