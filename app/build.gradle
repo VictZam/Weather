@@ -25,6 +25,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     apply plugin: 'android'
     implementation('com.android.support:support-v13:20.0.0') {
         force = true
