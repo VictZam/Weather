@@ -26,7 +26,7 @@ public class WeatherApi {
 
     public static String apiRequest(String lat, String lon) {
         StringBuilder sb = new StringBuilder(API_LINK);
-        sb.append(String.format("?key=%s&q=%s,%s&format=json&num_of_days=7", API_KEY, lat, lon));
+        sb.append(String.format("?key=%s&q=%s,%s&format=json&num_of_days=7&lang=es", API_KEY, lat, lon));
         return sb.toString();
     }
 

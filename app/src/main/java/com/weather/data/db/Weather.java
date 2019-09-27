@@ -2,6 +2,7 @@ package com.weather.data.db;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class Weather extends RealmObject {
@@ -27,6 +28,8 @@ public class Weather extends RealmObject {
     float sunHour;
     @SerializedName("uvIndex")
     int uvIndex;
+    @SerializedName("hourly")
+    RealmList<Hourly> hourly;
 
 
     public String getLocality() {
@@ -115,5 +118,13 @@ public class Weather extends RealmObject {
 
     public void setUvIndex(int uvIndex) {
         this.uvIndex = uvIndex;
+    }
+
+    public RealmList<Hourly> getHourly() {
+        return hourly;
+    }
+
+    public void setHourly(RealmList<Hourly> hourly) {
+        this.hourly = hourly;
     }
 }
