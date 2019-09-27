@@ -1,8 +1,5 @@
 package com.weather.ui.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,8 +9,10 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.weather.R;
-import com.weather.data.local.Principal;
 import com.weather.ui.animation.ProgressBarAnimation;
 
 public class MainActivity extends AppCompatActivity implements LocationListener{
@@ -39,9 +38,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         progressBar.setScaleY(3f);
 
         do {
-         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
 
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         } while (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED);
 
         progressAnimation();
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
     public void progressAnimation(){
         ProgressBarAnimation anim = new ProgressBarAnimation
                 (this, progressBar, textView, 0, 100);
-        anim.setDuration(8000);
+        anim.setDuration(1000);
         progressBar.setAnimation(anim);
     }
 

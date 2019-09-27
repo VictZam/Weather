@@ -3,12 +3,13 @@ package com.weather.ui.activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -22,7 +23,6 @@ import com.squareup.picasso.Picasso;
 import com.weather.R;
 import com.weather.data.db.WeatherLocation;
 import com.weather.data.local.Principal;
-import com.weather.services.api.ResponseListener;
 import com.weather.services.api.WeatherApi;
 
 import java.io.IOException;
@@ -89,13 +89,23 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, MY_PERMISSION);
         }
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (location == null)
-            Log.e("TAG", "No Location");
-        else
-            locationManager.requestLocationUpdates(provider, 400, 1, this);
 
+        locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
+
+        Location location = locationManager.getLastKnownLocation(bestProvider);
+        if (location != null) {
+            Log.e("TAG", "GPS is on");
+            Principal.lon = location.getLongitude();
+            Principal.lat = location.getLatitude();
+            saveCurrentLocationWeather();
+        }
+        else{
+            locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+        }
     }
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -108,16 +118,17 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         try {
             if(Principal.lat != 0 && Principal.lon != 0) {
                 Geocoder coder = new Geocoder(this, Locale.ENGLISH);
-                String locality = coder.getFromLocation(Principal.lat, Principal.lon, 1).get(0).getLocality();
+                Principal.locality = coder.getFromLocation(Principal.lat, Principal.lon, 1).get(0).getLocality();
+
+                Toast.makeText(this, Principal.locality, Toast.LENGTH_SHORT).show();
 
                 WeatherApi.getInstance().fetchWeather(
-                        String.valueOf(Principal.lat), String.valueOf(Principal.lon), locality, isSuccess -> {
+                        String.valueOf(Principal.lat), String.valueOf(Principal.lon), Principal.locality, isSuccess -> {
                             if(isSuccess)
                                 setCurrentLocationWeather();
                             else
                                 Toast.makeText(HomeActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
                         });
-
 
             } else {
                 Toast.makeText(this, "Por favor tome ubicacion", Toast.LENGTH_SHORT).show();
@@ -157,6 +168,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+
+    private boolean isNetDisponible() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
 
 }

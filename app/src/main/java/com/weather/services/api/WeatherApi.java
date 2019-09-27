@@ -75,7 +75,6 @@ public class WeatherApi {
                     @Override
                     public void onError(ANError anError) {
                         listener.onResult(false);
-
                     }
                 });
     }
