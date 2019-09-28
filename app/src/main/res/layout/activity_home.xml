@@ -1,77 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.activities.HomeActivity">
 
-    <TextView
-        android:id="@+id/txtCity"
-        android:layout_marginTop="40dp"
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textStyle="bold"
-        android:textSize="36sp"
-        android:gravity="center"
-        />
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-    <TextView
-        android:id="@+id/txtLastUpdate"
+
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="fixed"
+                app:tabGravity="fill">
+
+            </com.google.android.material.tabs.TabLayout>
+
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:gravity="center"
-        />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/imageView"
-        android:layout_gravity="center"
-        />
+    </androidx.viewpager.widget.ViewPager>
 
-    <TextView
-        android:id="@+id/txtDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:gravity="center"
-        />
 
-    <TextView
-        android:id="@+id/txtHumidity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:gravity="center"
-        />
-
-    <TextView
-        android:id="@+id/txtTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:gravity="center"
-        />
-
-    <TextView
-        android:id="@+id/txtCelsius"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:gravity="center"
-        />
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

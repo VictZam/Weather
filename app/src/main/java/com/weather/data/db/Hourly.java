@@ -29,7 +29,7 @@ public class Hourly extends RealmObject {
         this.weatherDesc = weatherDesc;
     }
 
-    public void deleteHourly(RealmList<Hourly> hourlies) {
+    public static void deleteHourly(RealmList<Hourly> hourlies) {
         if (hourlies.size() != 0) {
             for(Hourly hourly : hourlies){
                 new WeatherIconUrl().deleteWeatherIconUrls(hourly.getWeatherIconUrl());

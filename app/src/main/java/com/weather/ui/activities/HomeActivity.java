@@ -11,27 +11,51 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 import com.weather.R;
 import com.weather.data.db.WeatherLocation;
 import com.weather.data.local.Principal;
 import com.weather.services.api.WeatherApi;
+import com.weather.ui.adapters.ViewPagerAdapter;
+import com.weather.ui.fragments.TodayWeatherFragment;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
 
 
 public class HomeActivity extends AppCompatActivity implements LocationListener {
+
+    private androidx.appcompat.widget.Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    private CoordinatorLayout coordinatorLayout;
 
     TextView txtCity, txtLastUpdate, txtDescription;
     TextView txtHumidity, txtTime, txtCelsius;
@@ -47,31 +71,61 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        txtCity = findViewById(R.id.txtCity);
-        txtLastUpdate = findViewById(R.id.txtLastUpdate);
-        txtDescription = findViewById(R.id.txtDescription);
-        txtHumidity = findViewById(R.id.txtHumidity);
-        txtTime = findViewById(R.id.txtTime);
-        txtCelsius = findViewById(R.id.txtCelsius);
-        imageView = findViewById(R.id.imageView);
+        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.rootView);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        provider = locationManager.getBestProvider(new Criteria(), false);
+        toolbar = (androidx.appcompat.widget.Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        saveCurrentLocationWeather();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+        Dexter.withActivity(this)
+                .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                            provider = locationManager.getBestProvider(new Criteria(), false);
+
+                            saveCurrentLocationWeather();
+
+                            viewPager = (ViewPager)findViewById(R.id.viewPager);
+                            setupViewPage(viewPager);
+                            tabLayout = (TabLayout)findViewById(R.id.tabs);
+                            tabLayout.setupWithViewPager(viewPager);
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        Snackbar.make(coordinatorLayout, "Permission Denied", Snackbar.LENGTH_LONG)
+                                .show();
+                    }
+                }).check();
+    }
+
+    private void setupViewPage(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(TodayWeatherFragment.getInstance(), "Today");
+        viewPager.setAdapter(adapter);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        validatePermition();
-        locationManager.removeUpdates(this);
+        //validatePermition();
+       // locationManager.removeUpdates(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        validatePermition();
+        //validatePermition();
     }
 
     public void validatePermition(){
@@ -143,7 +197,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             WeatherLocation weatherLocation = realm.where(WeatherLocation.class)
                     .findFirst();
 
-            txtCity.setText(String.format("%s", weatherLocation.getLocality()));
+            /*txtCity.setText(String.format("%s", weatherLocation.getLocality()));
             txtLastUpdate.setText(String.format("Last Updated: %s", weatherLocation.getWeather().get(0).getDate()));
             txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
             txtHumidity.setText(String.format("%.1f", weatherLocation.getCurrentCondition().get(0).getHumidity()));
@@ -151,7 +205,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             txtCelsius.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getCelcius()));
             Picasso.with(HomeActivity.this)
                     .load(R.drawable.nube)
-                    .into(imageView);
+                    .into(imageView);*/
         }
     }
 

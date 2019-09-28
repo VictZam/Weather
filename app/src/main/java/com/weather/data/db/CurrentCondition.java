@@ -221,11 +221,11 @@ public class CurrentCondition extends RealmObject {
     }
 
 
-    public void deleteCurrentCondition(RealmList<CurrentCondition> currentConditions) {
+    public static void deleteCurrentCondition(RealmList<CurrentCondition> currentConditions) {
         if (currentConditions.size() != 0) {
             for(CurrentCondition currentCondition : currentConditions){
-                new WeatherIconUrl().deleteWeatherIconUrls(currentCondition.getWeatherIconUrl());
-                new WeatherDesc().deleteWeatherDesc(currentCondition.getWeatherDesc());
+                WeatherIconUrl.deleteWeatherIconUrls(currentCondition.getWeatherIconUrl());
+                WeatherDesc.deleteWeatherDesc(currentCondition.getWeatherDesc());
             }
 
             try (Realm realm = Realm.getDefaultInstance()) {

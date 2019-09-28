@@ -19,7 +19,7 @@ public class WeatherDesc extends RealmObject {
         this.value = value;
     }
 
-    public void deleteWeatherDesc(RealmList<WeatherDesc> weatherDescs) {
+    public static void deleteWeatherDesc(RealmList<WeatherDesc> weatherDescs) {
         if (weatherDescs.size() != 0) {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(realmQuerry -> weatherDescs.deleteAllFromRealm());

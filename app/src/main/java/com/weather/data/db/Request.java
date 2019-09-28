@@ -29,7 +29,7 @@ public class Request extends RealmObject {
         this.query = query;
     }
 
-    public void deleteRequest(RealmList<Request> request) {
+    public static void deleteRequest(RealmList<Request> request) {
         if (request.size() != 0) {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(realmQuerry -> request.deleteAllFromRealm());

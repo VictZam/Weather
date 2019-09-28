@@ -130,10 +130,10 @@ public class Weather extends RealmObject {
     }
 
 
-    public void deleteWeather(RealmList<Weather> weathers) {
+    public static void deleteWeather(RealmList<Weather> weathers) {
         if (weathers.size() != 0) {
             for(Weather weather : weathers){
-                new Hourly().deleteHourly(weather.getHourly());
+                Hourly.deleteHourly(weather.getHourly());
             }
 
             try (Realm realm = Realm.getDefaultInstance()) {

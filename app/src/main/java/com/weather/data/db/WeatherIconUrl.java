@@ -19,7 +19,7 @@ public class WeatherIconUrl extends RealmObject {
         this.value = value;
     }
 
-    public void deleteWeatherIconUrls(RealmList<WeatherIconUrl> weatherIconUrls) {
+    public static void deleteWeatherIconUrls(RealmList<WeatherIconUrl> weatherIconUrls) {
         if (weatherIconUrls.size() != 0) {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(realmQuerry -> weatherIconUrls.deleteAllFromRealm());

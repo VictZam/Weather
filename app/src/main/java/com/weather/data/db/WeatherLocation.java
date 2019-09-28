@@ -15,7 +15,7 @@ public class WeatherLocation extends RealmObject {
     @SerializedName("request")
     private RealmList<Request> request;
     @SerializedName("current_condition")
-    private RealmList<CurrentCondition> CurrentCondition;
+    private RealmList<CurrentCondition> currentCondition;
     @SerializedName("weather")
     private RealmList<Weather> weather;
 
@@ -35,12 +35,12 @@ public class WeatherLocation extends RealmObject {
         this.request = request;
     }
 
-    public RealmList<com.weather.data.db.CurrentCondition> getCurrentCondition() {
-        return CurrentCondition;
+    public RealmList<CurrentCondition> getCurrentCondition() {
+        return currentCondition;
     }
 
-    public void setCurrentCondition(RealmList<com.weather.data.db.CurrentCondition> currentCondition) {
-        CurrentCondition = currentCondition;
+    public void setCurrentCondition(RealmList<CurrentCondition> currentCondition) {
+        this.currentCondition = currentCondition;
     }
 
     public RealmList<Weather> getWeather() {
@@ -54,10 +54,10 @@ public class WeatherLocation extends RealmObject {
 
     public void deleteCascadeWeatherLocation(WeatherLocation weatherLocation){
         if(weatherLocation != null) {
-            new Request().deleteRequest(weatherLocation.getRequest());
-            new Weather().deleteWeather(weatherLocation.getWeather());
-            new CurrentCondition().deleteCurrentCondition(weatherLocation.getCurrentCondition());
-            
+            Request.deleteRequest(weatherLocation.getRequest());
+            Weather.deleteWeather(weatherLocation.getWeather());
+            CurrentCondition.deleteCurrentCondition(weatherLocation.getCurrentCondition());
+
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(realmQuerry -> weatherLocation.deleteFromRealm());
             }
