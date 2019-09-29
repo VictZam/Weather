@@ -30,6 +30,7 @@ import com.weather.R;
 import com.weather.data.local.Principal;
 import com.weather.services.api.WeatherApi;
 import com.weather.ui.adapters.ViewPagerAdapter;
+import com.weather.ui.fragments.ForecastFragment;
 import com.weather.ui.fragments.TodayWeatherFragment;
 
 import java.io.IOException;
@@ -58,8 +59,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
 
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -92,6 +91,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private void setupViewPage(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(TodayWeatherFragment.getInstance(), "Today");
+        adapter.addFragment(ForecastFragment.getInstance(), "7 DAYAS");
         viewPager.setAdapter(adapter);
 
     }
