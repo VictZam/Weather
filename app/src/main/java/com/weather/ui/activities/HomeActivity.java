@@ -11,22 +11,14 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.karumi.dexter.Dexter;
@@ -34,9 +26,7 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.squareup.picasso.Picasso;
 import com.weather.R;
-import com.weather.data.db.WeatherLocation;
 import com.weather.data.local.Principal;
 import com.weather.services.api.WeatherApi;
 import com.weather.ui.adapters.ViewPagerAdapter;
@@ -46,9 +36,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import io.realm.Realm;
-
-
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
     private androidx.appcompat.widget.Toolbar toolbar;
@@ -57,14 +44,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     private CoordinatorLayout coordinatorLayout;
 
-    TextView txtCity, txtLastUpdate, txtDescription;
-    TextView txtHumidity, txtTime, txtCelsius;
-    ImageView imageView;
-
     LocationManager locationManager;
     String provider;
-
-    int MY_PERMISSION = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                             provider = locationManager.getBestProvider(new Criteria(), false);
 
-                            saveCurrentLocationWeather();
+                            validatePermition();
 
                             viewPager = (ViewPager)findViewById(R.id.viewPager);
                             setupViewPage(viewPager);
@@ -118,14 +99,14 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onPause() {
         super.onPause();
-        //validatePermition();
-       // locationManager.removeUpdates(this);
+        validatePermition();
+        //locationManager.removeUpdates(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //validatePermition();
+        validatePermition();
     }
 
     public void validatePermition(){
@@ -133,15 +114,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
-
-            ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
-                    Manifest.permission.INTERNET,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_NETWORK_STATE,
-                    Manifest.permission.SYSTEM_ALERT_WINDOW,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, MY_PERMISSION);
+           return;
         }
 
         locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
@@ -193,20 +166,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void setCurrentLocationWeather(){
-        try(Realm realm = Realm.getDefaultInstance()) {
-            WeatherLocation weatherLocation = realm.where(WeatherLocation.class)
-                    .findFirst();
 
-            /*txtCity.setText(String.format("%s", weatherLocation.getLocality()));
-            txtLastUpdate.setText(String.format("Last Updated: %s", weatherLocation.getWeather().get(0).getDate()));
-            txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
-            txtHumidity.setText(String.format("%.1f", weatherLocation.getCurrentCondition().get(0).getHumidity()));
-            txtTime.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getObservationTime()));
-            txtCelsius.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getCelcius()));
-            Picasso.with(HomeActivity.this)
-                    .load(R.drawable.nube)
-                    .into(imageView);*/
-        }
     }
 
     @Override

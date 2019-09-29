@@ -10,6 +10,10 @@
     tools:context=".ui.activities.HomeActivity">
 
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -18,39 +22,27 @@
         android:background="@color/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
     </androidx.appcompat.widget.Toolbar>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:background="@color/colorPrimaryDark"
+            app:tabTextColor="@android:color/white"
+            app:tabIndicatorColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-
-
-
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabMode="fixed"
-                app:tabGravity="fill">
-
-            </com.google.android.material.tabs.TabLayout>
-
-
-
-
+        </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </androidx.viewpager.widget.ViewPager>
-
+        </androidx.viewpager.widget.ViewPager>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
