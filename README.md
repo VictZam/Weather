@@ -1,3 +1,16 @@
+Proyecto desarrollado por Victor Alejandro Zamora Pacheco.
+
+En este proyecto se aplica las nuecas tecnologias para poder obtener el estado del tiempo actual de tu ciudad, utilizando la ubicacion del dispositivo y la conexion a internet mediante el manejo de API.
+
+
+Descargas.
+RAR.
+https://github.com/VictZam/Weather/raw/master/Mr%20Weather%20v1.rar
+APK.
+https://github.com/VictZam/Weather/raw/master/Mr%20Weather%20v1.apk
+
+
+Problematica:
 # Weather
 Aplicación desarrollada para consulta y muestra del clima utilizando la ubicación del usuario.
 
