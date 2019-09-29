@@ -30,6 +30,7 @@ import com.weather.R;
 import com.weather.data.local.Principal;
 import com.weather.services.api.WeatherApi;
 import com.weather.ui.adapters.ViewPagerAdapter;
+import com.weather.ui.fragments.CitySearchFragment;
 import com.weather.ui.fragments.ForecastFragment;
 import com.weather.ui.fragments.TodayWeatherFragment;
 
@@ -92,6 +93,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(TodayWeatherFragment.getInstance(), "Today");
         adapter.addFragment(ForecastFragment.getInstance(), "7 DAYAS");
+        adapter.addFragment(CitySearchFragment.getInstance(), "Search");
         viewPager.setAdapter(adapter);
 
     }

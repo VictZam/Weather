@@ -24,14 +24,20 @@ public class WeatherApi {
         return instance;
     }
 
-    public static String apiRequest(String lat, String lon) {
+    public static String apiRequest(String lat, String lon, String locality) {
         StringBuilder sb = new StringBuilder(API_LINK);
-        sb.append(String.format("?key=%s&q=%s,%s&format=json&num_of_days=7&lang=es", API_KEY, lat, lon));
+        
+        if(lat !=  null || lon != null){
+            sb.append(String.format("?key=%s&q=%s,%s&format=json&num_of_days=7&lang=es", API_KEY, lat, lon));
+        } else {
+            sb.append(String.format("?key=%s&q=%s&format=json&num_of_days=7&lang=es", API_KEY, locality));
+        }
+
         return sb.toString();
     }
 
     public void fetchWeather(String latitude, String longitude, String locality, final ResponseListener listener) {
-        AndroidNetworking.get(apiRequest(latitude, longitude))
+        AndroidNetworking.get(apiRequest(latitude, longitude, locality))
                 .build()
                 .getAsObject(ResponseList.class, new ParsedRequestListener<ResponseList>() {
                     @Override
