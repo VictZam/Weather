@@ -1,8 +1,11 @@
 package com.weather.ui.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -191,22 +194,42 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.buttonSave)
     public void OnClickSave(View view) {
-        if(gps && memory) {
-            SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean("setting", true);
-            editor.apply();
-            this.startActivity(new Intent(this, slideInfoActivity.class));
-            finish();
+        if(isNetDisponible()) {
+            if (gps && memory) {
+                SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("setting", true);
+                editor.apply();
+                this.startActivity(new Intent(this, slideInfoActivity.class));
+                finish();
+            } else {
+                if (getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+                    Snackbar.make(coordinatorLayout, "Permisos requeridos para poder continuar", Snackbar.LENGTH_LONG)
+                            .show();
+                } else {
+                    Snackbar.make(coordinatorLayout, "Permissions required to continue", Snackbar.LENGTH_LONG)
+                            .show();
+                }
+            }
         } else {
-            if(getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")){
-                Snackbar.make(coordinatorLayout, "Permisos requeridos para poder continuar", Snackbar.LENGTH_LONG)
+            if (getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+                Snackbar.make(coordinatorLayout, "Conexion a internet requerida por ser la primera vez que se abre la aplicacion", Snackbar.LENGTH_LONG)
                         .show();
             } else {
-                Snackbar.make(coordinatorLayout, "Permissions required to continue", Snackbar.LENGTH_LONG)
+                Snackbar.make(coordinatorLayout, "Internet connection required for being the first time the application is opened", Snackbar.LENGTH_LONG)
                         .show();
             }
         }
+    }
+
+
+    private boolean isNetDisponible() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
 
 

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -121,9 +120,6 @@ public class slideInfoActivity extends AppIntro {
                 editor.putString("lat", String.valueOf(lat));
                 editor.putString("locality", locality);
                 editor.apply();
-
-            } else {
-                locationManager.requestLocationUpdates(bestProvider, 1000, 0, (LocationListener) this);
             }
         } catch (IOException e) {
             e.printStackTrace();
