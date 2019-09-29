@@ -2,12 +2,12 @@ package com.weather.data.db;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class Weather extends RealmObject {
 
-    private String locality;
     @SerializedName("date")
     String date;
     @SerializedName("maxtempC")
@@ -30,15 +30,6 @@ public class Weather extends RealmObject {
     int uvIndex;
     @SerializedName("hourly")
     RealmList<Hourly> hourly;
-
-
-    public String getLocality() {
-        return locality;
-    }
-
-    public void setLocality(String locality) {
-        this.locality = locality;
-    }
 
     public String getDate() {
         return date;
@@ -126,5 +117,18 @@ public class Weather extends RealmObject {
 
     public void setHourly(RealmList<Hourly> hourly) {
         this.hourly = hourly;
+    }
+
+
+    public static void deleteWeather(RealmList<Weather> weathers) {
+        if (weathers.size() != 0) {
+            for(Weather weather : weathers){
+                Hourly.deleteHourly(weather.getHourly());
+            }
+
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realmQuerry -> weathers.deleteAllFromRealm());
+            }
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.weather.data.db;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class Request extends RealmObject {
@@ -25,5 +27,13 @@ public class Request extends RealmObject {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public static void deleteRequest(RealmList<Request> request) {
+        if (request.size() != 0) {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realmQuerry -> request.deleteAllFromRealm());
+            }
+        }
     }
 }

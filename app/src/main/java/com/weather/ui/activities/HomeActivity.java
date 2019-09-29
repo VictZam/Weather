@@ -12,60 +12,97 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.viewpager.widget.ViewPager;
 
-import com.squareup.picasso.Picasso;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.weather.R;
-import com.weather.data.db.WeatherLocation;
 import com.weather.data.local.Principal;
 import com.weather.services.api.WeatherApi;
+import com.weather.ui.adapters.ViewPagerAdapter;
+import com.weather.ui.fragments.CitySearchFragment;
+import com.weather.ui.fragments.ForecastFragment;
+import com.weather.ui.fragments.TodayWeatherFragment;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
-
-import io.realm.Realm;
-
 
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
-    TextView txtCity, txtLastUpdate, txtDescription;
-    TextView txtHumidity, txtTime, txtCelsius;
-    ImageView imageView;
+    private androidx.appcompat.widget.Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    private CoordinatorLayout coordinatorLayout;
 
     LocationManager locationManager;
     String provider;
-
-    int MY_PERMISSION = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        txtCity = findViewById(R.id.txtCity);
-        txtLastUpdate = findViewById(R.id.txtLastUpdate);
-        txtDescription = findViewById(R.id.txtDescription);
-        txtHumidity = findViewById(R.id.txtHumidity);
-        txtTime = findViewById(R.id.txtTime);
-        txtCelsius = findViewById(R.id.txtCelsius);
-        imageView = findViewById(R.id.imageView);
+        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.rootView);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        provider = locationManager.getBestProvider(new Criteria(), false);
+        toolbar = (androidx.appcompat.widget.Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        saveCurrentLocationWeather();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Dexter.withActivity(this)
+                .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                            provider = locationManager.getBestProvider(new Criteria(), false);
+
+                            validatePermition();
+
+                            viewPager = (ViewPager)findViewById(R.id.viewPager);
+                            setupViewPage(viewPager);
+                            tabLayout = (TabLayout)findViewById(R.id.tabs);
+                            tabLayout.setupWithViewPager(viewPager);
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        Snackbar.make(coordinatorLayout, "Permission Denied", Snackbar.LENGTH_LONG)
+                                .show();
+                    }
+                }).check();
+    }
+
+    private void setupViewPage(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(TodayWeatherFragment.getInstance(), "Today");
+        adapter.addFragment(ForecastFragment.getInstance(), "7 DAYAS");
+        adapter.addFragment(CitySearchFragment.getInstance(), "Search");
+        viewPager.setAdapter(adapter);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         validatePermition();
-        locationManager.removeUpdates(this);
+        //locationManager.removeUpdates(this);
     }
 
     @Override
@@ -79,15 +116,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
-
-            ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
-                    Manifest.permission.INTERNET,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_NETWORK_STATE,
-                    Manifest.permission.SYSTEM_ALERT_WINDOW,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, MY_PERMISSION);
+           return;
         }
 
         locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
@@ -139,20 +168,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void setCurrentLocationWeather(){
-        try(Realm realm = Realm.getDefaultInstance()) {
-            WeatherLocation weatherLocation = realm.where(WeatherLocation.class)
-                    .findFirst();
 
-            txtCity.setText(String.format("%s", weatherLocation.getLocality()));
-            txtLastUpdate.setText(String.format("Last Updated: %s", weatherLocation.getWeather().get(0).getDate()));
-            txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
-            txtHumidity.setText(String.format("%.1f", weatherLocation.getCurrentCondition().get(0).getHumidity()));
-            txtTime.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getObservationTime()));
-            txtCelsius.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getCelcius()));
-            Picasso.with(HomeActivity.this)
-                    .load(R.drawable.nube)
-                    .into(imageView);
-        }
     }
 
     @Override

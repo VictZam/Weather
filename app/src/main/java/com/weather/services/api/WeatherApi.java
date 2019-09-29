@@ -24,14 +24,20 @@ public class WeatherApi {
         return instance;
     }
 
-    public static String apiRequest(String lat, String lon) {
+    public static String apiRequest(String lat, String lon, String locality) {
         StringBuilder sb = new StringBuilder(API_LINK);
-        sb.append(String.format("?key=%s&q=%s,%s&format=json&num_of_days=7&lang=es", API_KEY, lat, lon));
+        
+        if(lat !=  null || lon != null){
+            sb.append(String.format("?key=%s&q=%s,%s&format=json&num_of_days=7&lang=es", API_KEY, lat, lon));
+        } else {
+            sb.append(String.format("?key=%s&q=%s&format=json&num_of_days=7&lang=es", API_KEY, locality));
+        }
+
         return sb.toString();
     }
 
     public void fetchWeather(String latitude, String longitude, String locality, final ResponseListener listener) {
-        AndroidNetworking.get(apiRequest(latitude, longitude))
+        AndroidNetworking.get(apiRequest(latitude, longitude, locality))
                 .build()
                 .getAsObject(ResponseList.class, new ParsedRequestListener<ResponseList>() {
                     @Override
@@ -45,27 +51,17 @@ public class WeatherApi {
 
                         try (Realm realm = Realm.getDefaultInstance()) {
                             weatherLocations.setLocality(locality);
-                            realm.executeTransaction(realmQuerry -> {
-                                WeatherLocation weatherRegisterLocation = realmQuerry
-                                        .where(WeatherLocation.class)
-                                        .equalTo("locality", locality)
-                                        .findFirst();
 
-                                if(weatherRegisterLocation != null) {
-                                    for(int i = 0; i < weatherRegisterLocation.getRequest().size(); i++) {
-                                        weatherRegisterLocation.getRequest().get(i).deleteFromRealm();
-                                    }
-                                    for(int i = 0; i < weatherRegisterLocation.getWeather().size(); i++) {
-                                        weatherRegisterLocation.getWeather().get(i).deleteFromRealm();
-                                    }
-                                    for(int i = 0; i < weatherRegisterLocation.getCurrentCondition().size(); i++) {
-                                        weatherRegisterLocation.getCurrentCondition().get(i).deleteFromRealm();
-                                    }
-                                        weatherRegisterLocation.deleteFromRealm();
-                                }
+                            WeatherLocation weatherRegisterLocation = realm
+                                    .where(WeatherLocation.class)
+                                    .equalTo("locality", locality)
+                                    .findFirst();
 
-                                realmQuerry.insertOrUpdate(weatherLocations);
-                            });
+                            if(weatherRegisterLocation != null) {
+                                weatherRegisterLocation.deleteCascadeWeatherLocation(weatherRegisterLocation);
+                            }
+
+                            realm.executeTransaction(realmQuerry -> realmQuerry.insertOrUpdate(weatherLocations));
 
                         }
 
