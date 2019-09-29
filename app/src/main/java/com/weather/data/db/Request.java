@@ -9,9 +9,9 @@ import io.realm.RealmObject;
 public class Request extends RealmObject {
 
     @SerializedName("type")
-    String type;
+    private String type;
     @SerializedName("query")
-    String query;
+    private String query;
 
     public String getType() {
         return type;

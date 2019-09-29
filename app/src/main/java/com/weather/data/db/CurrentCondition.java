@@ -2,55 +2,53 @@ package com.weather.data.db;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class CurrentCondition extends RealmObject {
     @SerializedName("observation_time")
-    String observationTime;
+    private String observationTime;
     @SerializedName("temp_C")
-    float celcius;
+    private float celcius;
     @SerializedName("temp_F")
-    float farenheit;
+    private float farenheit;
     @SerializedName("weatherCode")
-    int wheatherCode;
+    private int wheatherCode;
     @SerializedName("weatherIconUrl")
-    RealmList<WeatherIconUrl> weatherIconUrl;
+    private RealmList<WeatherIconUrl> weatherIconUrl;
     @SerializedName("weatherDesc")
     RealmList<WeatherDesc> weatherDesc;
     @SerializedName("windspeedMiles")
-    float windspeedMiles;
+    private float windspeedMiles;
     @SerializedName("windspeedKmph")
-    float windspeedKmph;
+    private float windspeedKmph;
     @SerializedName("winddirDegree")
-    float winddirDegree;
+    private float winddirDegree;
     @SerializedName("winddir16Point")
     String winddir16Point;
     @SerializedName("recipMM")
-    float recipMM;
+    private float recipMM;
     @SerializedName("precipInches")
-    float precipInches;
+    private float precipInches;
     @SerializedName("humidity")
-    float humidity;
+    private float humidity;
     @SerializedName("visibility")
-    float visibility;
+    private float visibility;
     @SerializedName("visibilityMiles")
-    float visibilityMiles;
+    private float visibilityMiles;
     @SerializedName("pressure")
-    float pressure;
+    private float pressure;
     @SerializedName("pressureInches")
-    float pressureInches;
+    private float pressureInches;
     @SerializedName("cloudcover")
-    float cloudcover;
+    private float cloudcover;
     @SerializedName("FeelsLikeC")
-    float FeelsLikeC;
+    private float FeelsLikeC;
     @SerializedName("FeelsLikeF")
-    float FeelsLikeF;
+    private float FeelsLikeF;
     @SerializedName("uvIndex")
-    int uvIndex;
+    private int uvIndex;
 
     public String getObservationTime() {
         return observationTime;

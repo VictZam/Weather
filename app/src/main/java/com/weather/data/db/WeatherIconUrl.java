@@ -9,7 +9,7 @@ import io.realm.RealmObject;
 public class WeatherIconUrl extends RealmObject {
 
     @SerializedName("value")
-    String value;
+    private String value;
 
     public String getValue() {
         return value;

@@ -14,11 +14,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.weather.R;
+import com.weather.data.db.Hourly;
 import com.weather.data.db.WeatherLocation;
 import com.weather.services.api.WeatherApi;
+import com.weather.ui.adapters.WeatherHourAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +59,9 @@ public class TodayWeatherFragment extends Fragment {
     @BindView(R.id.txtVisibilityText) TextView txtVisibilityText;
     @BindView(R.id.txtMaxTempText) TextView txtMaxTempText;
     @BindView(R.id.txtMinTempText) TextView txtMinTempText;
+    @BindView(R.id.txtHourTittle) TextView txtHourTittle;
+
+    RecyclerView recycleyViewHour;
 
     static TodayWeatherFragment instance;
 
@@ -76,12 +85,19 @@ public class TodayWeatherFragment extends Fragment {
         ButterKnife.bind(this, view);
         setCurrenWeatherData(view);
 
+        recycleyViewHour = (RecyclerView) view.findViewById(R.id.recycleyViewHour);
+
+        recycleyViewHour.setHasFixedSize(true);
+        recycleyViewHour.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+
         if(view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
             txtWindText.setText("Viento");
             txtPreasureText.setText("Presion");
             txtHumidityText.setText("Humedad");
             txtSensationText.setText("Sensacion");
             txtVisibilityText.setText("Visibilidad");
+            txtHourTittle.setText("Pronostico para las proximas horas del dia:");
         }
 
         return view;
@@ -120,6 +136,7 @@ public class TodayWeatherFragment extends Fragment {
                     txtSensation.setText(String.format("%.2f °F", weatherLocation.getCurrentCondition().get(0).getFeelsLikeF()));
                     txtMaxTemp.setText(String.format("%.2f °F", weatherLocation.getWeather().get(0).getMaxtempF()));
                     txtMinTemp.setText(String.format("%.2f °F", weatherLocation.getWeather().get(0).getMintempF()));
+
                 } else {
                     txtTemperature.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getCelcius()));
                     txtSensation.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getFeelsLikeC()));
@@ -144,6 +161,15 @@ public class TodayWeatherFragment extends Fragment {
                 Picasso.with(view.getContext())
                         .load(weatherLocation.getCurrentCondition().get(0).getWeatherIconUrl().get(0).getValue())
                         .into(imageWeather);
+
+
+                ArrayList<Hourly> hourlies = new ArrayList<>();
+                hourlies.addAll(realm.copyFromRealm(weatherLocation.getWeather().get(0).getHourly()));
+
+                WeatherHourAdapter adapter = new WeatherHourAdapter
+                        (getContext(), hourlies);
+                recycleyViewHour.setAdapter(adapter);
+
             }
         }
     }

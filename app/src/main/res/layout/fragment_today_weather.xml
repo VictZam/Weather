@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:id="@+id/weatherPanel"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:id="@+id/txtCityName"
             android:layout_width="wrap_content"
@@ -33,23 +32,22 @@
 
             <ImageView
                 android:id="@+id/imageViewWeather"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@mipmap/ic_launcher"></ImageView>
+
+            <TextView
+                android:id="@+id/txtTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="14 C°"
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="50dp"
+                android:textStyle="bold"/>
 
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtTemperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="14 C°"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="50dp"
-            android:textStyle="bold"/>
-
 
         <TextView
             android:id="@+id/txtDescription"
@@ -239,6 +237,26 @@
 
 
         </TableLayout>
+
+        <TextView
+            android:id="@+id/txtHourTittle"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forecast for the next hours of the day"
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleyViewHour"
+            android:layout_below="@id/mainInfo"
+            android:layout_marginTop="10dp"
+            android:scrollbars="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 

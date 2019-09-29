@@ -9,11 +9,15 @@ import io.realm.RealmObject;
 public class Hourly extends RealmObject {
 
     @SerializedName("weatherIconUrl")
-    RealmList<WeatherIconUrl> weatherIconUrl;
+    private RealmList<WeatherIconUrl> weatherIconUrl;
     @SerializedName("weatherDesc")
-    RealmList<WeatherDesc> weatherDesc;
+    private RealmList<WeatherDesc> weatherDesc;
     @SerializedName("lang_es")
-    RealmList<WeatherDescSpanish> weatherDescSpanis;
+    private RealmList<WeatherDescSpanish> weatherDescSpanis;
+    @SerializedName("tempC")
+    private Double tempC;
+    @SerializedName("tempF")
+    private Double tempF;
 
     public RealmList<WeatherIconUrl> getWeatherIconUrl() {
         return weatherIconUrl;
@@ -53,4 +57,19 @@ public class Hourly extends RealmObject {
         }
     }
 
+    public Double getTempC() {
+        return tempC;
+    }
+
+    public void setTempC(Double tempC) {
+        this.tempC = tempC;
+    }
+
+    public Double getTempF() {
+        return tempF;
+    }
+
+    public void setTempF(Double tempF) {
+        this.tempF = tempF;
+    }
 }

@@ -9,27 +9,27 @@ import io.realm.RealmObject;
 public class Weather extends RealmObject {
 
     @SerializedName("date")
-    String date;
+    private String date;
     @SerializedName("maxtempC")
-    float maxtempC;
+    private float maxtempC;
     @SerializedName("maxtempF")
-    float maxtempF;
+    private float maxtempF;
     @SerializedName("mintempC")
-    float mintempC;
+    private float mintempC;
     @SerializedName("mintempF")
-    float mintempF;
+    private float mintempF;
     @SerializedName("avgtempC")
-    float avgtempC;
+    private float avgtempC;
     @SerializedName("avgtempF")
-    float avgtempF;
+    private float avgtempF;
     @SerializedName("totalSnow_cm")
-    float totalSnow_cm;
+    private float totalSnow_cm;
     @SerializedName("sunHour")
-    float sunHour;
+    private float sunHour;
     @SerializedName("uvIndex")
-    int uvIndex;
+    private int uvIndex;
     @SerializedName("hourly")
-    RealmList<Hourly> hourly;
+    private RealmList<Hourly> hourly;
 
     public String getDate() {
         return date;
