@@ -42,11 +42,11 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Picasso.with(context)
-                .load(R.drawable.nube)
+                .load(weather.get(position).getHourly().get(0).getWeatherIconUrl().get(0).getValue())
                 .into(holder.imageViewWeather);
 
         holder.txtDate.setText(weather.get(position).getDate());
-        holder.txtTemperature.setText(String.format("%.2f °C",weather.get(position).getAvgtempC()));
+        holder.txtTemperature.setText(String.format("%.2f °Ce",weather.get(position).getAvgtempC()));
         holder.txtDescription.setText(weather.get(position).getHourly().get(0).getWeatherDesc().get(0).getValue());
 
     }

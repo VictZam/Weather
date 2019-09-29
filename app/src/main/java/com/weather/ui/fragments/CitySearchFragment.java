@@ -180,18 +180,18 @@ public class CitySearchFragment extends Fragment {
                 weatherPanel.setVisibility(View.VISIBLE);
 
                 txtCityName.setText(String.format("%s", weatherLocation.getLocality()));
-                txtTemperature.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getCelcius()));
+                txtTemperature.setText(String.format("%.2f °Ce", weatherLocation.getCurrentCondition().get(0).getCelcius()));
                 txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
                 txtDateTime.setText(String.format("Date: %s ", weatherLocation.getWeather().get(0).getDate()));
                 txtWind.setText(String.format("%.2f Km", weatherLocation.getCurrentCondition().get(0).getWindspeedKmph()));
                 txtPreassure.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getPressure()));
                 txtHumidity.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getHumidity()));
-                txtSensation.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getFeelsLikeC()));
+                txtSensation.setText(String.format("%.2f °Ce", weatherLocation.getCurrentCondition().get(0).getFeelsLikeC()));
                 txtVisibility.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getVisibility()));
                 txtGeoCoord.setText(String.format("%s", weatherLocation.getRequest().get(0).getQuery()).replace("and", ",").replace("Lat", "").replace("Lon", ""));
 
                 Picasso.with(getContext())
-                        .load(R.drawable.nube)
+                        .load(weatherLocation.getCurrentCondition().get(0).getWeatherIconUrl().get(0).getValue())
                         .into(imageWeather);
 
             } else {

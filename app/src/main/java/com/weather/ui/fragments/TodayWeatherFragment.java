@@ -1,6 +1,9 @@
 package com.weather.ui.fragments;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +18,13 @@ import androidx.fragment.app.Fragment;
 import com.squareup.picasso.Picasso;
 import com.weather.R;
 import com.weather.data.db.WeatherLocation;
-import com.weather.data.local.Principal;
+import com.weather.services.api.WeatherApi;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,13 +63,35 @@ public class TodayWeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_today_weather, container, false);
         ButterKnife.bind(this, view);
+        setCurrenWeatherData(view);
 
+        return view;
+    }
+
+
+    public void setCurrenWeatherData(View view) {
+        if(isNetDisponible()) {
+            WeatherApi.getInstance().fetchWeather(
+                    view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lat", null),
+                    view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lon", null),
+                    view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null) , isSuccess -> {
+                        if (isSuccess)
+                            setCurrentLocationWeather(view);
+                        else {
+                            setCurrentLocationWeather(view);
+                        }
+                    });
+        } else {
+            setCurrentLocationWeather(view);
+        }
+    }
+
+    public void setCurrentLocationWeather(View view){
         try(Realm realm = Realm.getDefaultInstance()) {
             WeatherLocation weatherLocation = realm.where(WeatherLocation.class)
-                    .equalTo("locality", Principal.locality)
+                    .equalTo("locality", view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null))
                     .findFirst();
 
             if(weatherLocation != null) {
@@ -82,13 +109,20 @@ public class TodayWeatherFragment extends Fragment {
                 txtVisibility.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getVisibility()));
                 txtGeoCoord.setText(String.format("%s", weatherLocation.getRequest().get(0).getQuery()).replace("and",",").replace("Lat", "").replace("Lon", ""));
 
-            Picasso.with(view.getContext())
-                    .load(R.drawable.nube)
-                    .into(imageWeather);
+                Picasso.with(view.getContext())
+                        .load(weatherLocation.getCurrentCondition().get(0).getWeatherIconUrl().get(0).getValue())
+                        .into(imageWeather);
             }
         }
+    }
 
-        return view;
+    private boolean isNetDisponible() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
 
 }

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@color/colorPrimary"
+    android:padding="16dp"
     tools:context=".ui.activities.MainActivity">
 
     <pl.droidsonroids.gif.GifImageView
@@ -17,21 +17,21 @@
         android:src="@drawable/clima" />
 
     <TextView
+        android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/progress_bar"
+        android:layout_centerHorizontal="true"
         android:text="0 %"
         android:textColor="@color/colorAccent"
-        android:textSize="25sp"
-        android:id="@+id/text_view"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/progress_bar"/>
+        android:textSize="25sp" />
 
     <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/progress_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp" />
 
 </RelativeLayout>

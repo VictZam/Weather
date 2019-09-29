@@ -7,7 +7,7 @@ import android.view.animation.Transformation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.weather.ui.fragments.slideInfoActivity;
+import com.weather.ui.activities.SettingsActivity;
 
 public class ProgressBarAnimation extends Animation {
 
@@ -33,7 +33,7 @@ public class ProgressBarAnimation extends Animation {
         textView.setText((int)value + " %");
 
         if(value == to){
-            context.startActivity(new Intent(context, slideInfoActivity.class));
+            context.startActivity(new Intent(context, SettingsActivity.class));
         }
     }
 

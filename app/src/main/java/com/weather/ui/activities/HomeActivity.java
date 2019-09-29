@@ -2,14 +2,13 @@ package com.weather.ui.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,8 +26,6 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.weather.R;
-import com.weather.data.local.Principal;
-import com.weather.services.api.WeatherApi;
 import com.weather.ui.adapters.ViewPagerAdapter;
 import com.weather.ui.fragments.CitySearchFragment;
 import com.weather.ui.fragments.ForecastFragment;
@@ -61,18 +58,19 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        validatePermition();
+
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
+
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
                             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                             provider = locationManager.getBestProvider(new Criteria(), false);
-
-                            validatePermition();
 
                             viewPager = (ViewPager)findViewById(R.id.viewPager);
                             setupViewPage(viewPager);
@@ -126,8 +124,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         Location location = locationManager.getLastKnownLocation(bestProvider);
         if (location != null) {
             Log.e("TAG", "GPS is on");
-            Principal.lon = location.getLongitude();
-            Principal.lat = location.getLatitude();
+
+            SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("lon", String.valueOf(location.getLongitude()));
+            editor.putString("lat", String.valueOf(location.getLatitude()));
+            editor.apply();
+
             saveCurrentLocationWeather();
         }
         else{
@@ -138,37 +141,34 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(Location location) {
-        Principal.lat = location.getLatitude();
-        Principal.lon = location.getLongitude();
+        SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("lon", String.valueOf(location.getLongitude()));
+        editor.putString("lat", String.valueOf(location.getLatitude()));
+        editor.apply();
         saveCurrentLocationWeather();
     }
 
     public void saveCurrentLocationWeather(){
         try {
-            if(Principal.lat != 0 && Principal.lon != 0) {
+            if(getSharedPreferences("preferences", MODE_PRIVATE).getString("lat", null) != "0"
+                    && getSharedPreferences("preferences", MODE_PRIVATE).getString("lon", null) != "0") {
                 Geocoder coder = new Geocoder(this, Locale.ENGLISH);
-                Principal.locality = coder.getFromLocation(Principal.lat, Principal.lon, 1).get(0).getLocality();
 
-                Toast.makeText(this, Principal.locality, Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("locality", coder.getFromLocation(Double.parseDouble(getSharedPreferences("preferences", MODE_PRIVATE).getString("lat", null)),
+                        Double.parseDouble(getSharedPreferences("preferences", MODE_PRIVATE).getString("lon", null)),
+                        1).get(0).getLocality());
+                editor.apply();
 
-                WeatherApi.getInstance().fetchWeather(
-                        String.valueOf(Principal.lat), String.valueOf(Principal.lon), Principal.locality, isSuccess -> {
-                            if(isSuccess)
-                                setCurrentLocationWeather();
-                            else
-                                Toast.makeText(HomeActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
-                        });
-
+                Toast.makeText(this, getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Por favor tome ubicacion", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setCurrentLocationWeather(){
-
     }
 
     @Override
@@ -184,15 +184,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String s) {
 
-    }
-
-    private boolean isNetDisponible() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (actNetInfo != null && actNetInfo.isConnected());
     }
 
 }

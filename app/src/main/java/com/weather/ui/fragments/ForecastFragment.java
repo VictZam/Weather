@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.weather.R;
 import com.weather.data.db.Weather;
 import com.weather.data.db.WeatherLocation;
-import com.weather.data.local.Principal;
+import com.weather.services.api.WeatherApi;
 import com.weather.ui.adapters.WeatherForecastAdapter;
 
 import java.util.ArrayList;
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,13 +57,27 @@ public class ForecastFragment extends Fragment {
         recycleyViewForecast.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
 
+        WeatherApi.getInstance().fetchWeather(
+                view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lat", null),
+                view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lon", null),
+                view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null), isSuccess -> {
+                    if (isSuccess)
+                        setInfoForecast();
+                    else
+                        setInfoForecast();
+                });
+
+        return view;
+    }
+
+    public void setInfoForecast(){
         try (Realm realm = Realm.getDefaultInstance()) {
             WeatherLocation weatherLocation = realm.where(WeatherLocation.class)
-                    .equalTo("locality", Principal.locality)
+                    .equalTo("locality", getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null))
                     .findFirst();
 
             if (weatherLocation != null) {
-                txtCityName.setText(""+Principal.locality);
+                txtCityName.setText(getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null));
                 txtGeoCord.setText(String.format("%s", weatherLocation.getRequest().get(0)
                         .getQuery()).replace("and", ",").replace("Lat",
                         "").replace("Lon", ""));
@@ -73,9 +89,6 @@ public class ForecastFragment extends Fragment {
                         (getContext(), weathers);
                 recycleyViewForecast.setAdapter(adapter);
             }
-
-            return view;
         }
-
     }
 }
