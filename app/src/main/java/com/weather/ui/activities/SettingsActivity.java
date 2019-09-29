@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -79,7 +78,8 @@ public class SettingsActivity extends AppCompatActivity {
         imageButtonCelcius.setBackground(this.getDrawable(R.drawable.cel2));
         imageButtonFahrenheit.setBackground(this.getDrawable(R.drawable.fe));
 
-        Toast.makeText(this, "Celcius", Toast.LENGTH_SHORT).show();
+        Snackbar.make(coordinatorLayout, "Celcius", Snackbar.LENGTH_SHORT)
+                .show();
 
         SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -92,7 +92,8 @@ public class SettingsActivity extends AppCompatActivity {
         imageButtonFahrenheit.setBackground(this.getDrawable(R.drawable.fah2));
         imageButtonCelcius.setBackground(this.getDrawable(R.drawable.ce));
 
-        Toast.makeText(this, "Fahrenheit", Toast.LENGTH_SHORT).show();
+        Snackbar.make(coordinatorLayout, "Fahrenheit", Snackbar.LENGTH_SHORT)
+                .show();
 
         SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -107,7 +108,9 @@ public class SettingsActivity extends AppCompatActivity {
         txtSetting.setText("COFIGURACION");
         txtGps.setText("Permiso de ubicacion requerido");
         txtMemory.setText("Permiso de almacenamiento requerido");
-        Toast.makeText(this, "Español", Toast.LENGTH_SHORT).show();
+
+        Snackbar.make(coordinatorLayout, "Español", Snackbar.LENGTH_SHORT)
+                .show();
 
         SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -122,7 +125,9 @@ public class SettingsActivity extends AppCompatActivity {
         txtSetting.setText("SETTING");
         txtGps.setText("Location Permission Required");
         txtMemory.setText("Storage Permission Required");
-        Toast.makeText(this, "English", Toast.LENGTH_SHORT).show();
+
+        Snackbar.make(coordinatorLayout, "English", Snackbar.LENGTH_SHORT)
+                .show();
 
         SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();

@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -182,12 +181,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                         1).get(0).getLocality());
                 editor.apply();
 
-                Toast.makeText(this, getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null), Toast.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout,  getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null), Snackbar.LENGTH_SHORT)
+                        .show();
             } else {
                 if(getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
-                    Toast.makeText(this, "Por favor tome ubicacion", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(coordinatorLayout, "Por favor tome ubicacion", Snackbar.LENGTH_LONG)
+                            .show();
                 } else {
-                    Toast.makeText(this, "Please take location", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(coordinatorLayout, "Please take location", Snackbar.LENGTH_LONG)
+                            .show();
                 }
             }
         } catch (IOException e) {

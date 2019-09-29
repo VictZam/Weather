@@ -97,7 +97,7 @@ public class TodayWeatherFragment extends Fragment {
             txtHumidityText.setText("Humedad");
             txtSensationText.setText("Sensacion");
             txtVisibilityText.setText("Visibilidad");
-            txtHourTittle.setText("Pronostico para las proximas horas del dia:");
+            txtHourTittle.setText("Pronostico para las proximas horas:");
         }
 
         return view;

@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -82,13 +81,11 @@ public class slideInfoActivity extends AppIntro {
     public void onSkipPressed(Fragment currentFragment){
         validatePermition();
         startActivity(new Intent(this, HomeActivity.class));
-        Toast.makeText(this, "On Skip Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSlideChanged() {
         validatePermition();
-        Toast.makeText(this, "On Skip Changed", Toast.LENGTH_SHORT).show();
     }
 
 

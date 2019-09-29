@@ -8,13 +8,30 @@
     android:padding="16dp"
     tools:context=".ui.activities.MainActivity">
 
+
     <pl.droidsonroids.gif.GifImageView
+        android:layout_width="324dp"
+        android:layout_height="507dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="94dp"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/clima" />
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp"
-        android:src="@drawable/clima" />
+        android:background="@mipmap/ic_launcher_round2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mr. Weather"
+        android:layout_marginLeft="60sp"
+        android:textSize="30dp"
+        android:textStyle="bold"></TextView>
 
     <TextView
         android:id="@+id/text_view"

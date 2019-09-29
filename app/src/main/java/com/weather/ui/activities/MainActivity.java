@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
     public void progressAnimation(){
         ProgressBarAnimation anim = new ProgressBarAnimation
                 (this, progressBar, textView, 0, 100);
-        anim.setDuration(1000);
+        anim.setDuration(1583);
         progressBar.setAnimation(anim);
     }
 
