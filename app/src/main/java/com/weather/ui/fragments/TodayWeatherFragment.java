@@ -61,7 +61,7 @@ public class TodayWeatherFragment extends Fragment {
     @BindView(R.id.txtMinTempText) TextView txtMinTempText;
     @BindView(R.id.txtHourTittle) TextView txtHourTittle;
 
-    RecyclerView recycleyViewHour;
+    @BindView(R.id.recycleyViewHour) RecyclerView recycleyViewHour;
 
     static TodayWeatherFragment instance;
 
@@ -84,8 +84,6 @@ public class TodayWeatherFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_today_weather, container, false);
         ButterKnife.bind(this, view);
         setCurrenWeatherData(view);
-
-        recycleyViewHour = (RecyclerView) view.findViewById(R.id.recycleyViewHour);
 
         recycleyViewHour.setHasFixedSize(true);
         recycleyViewHour.setLayoutManager(new LinearLayoutManager(getContext(),

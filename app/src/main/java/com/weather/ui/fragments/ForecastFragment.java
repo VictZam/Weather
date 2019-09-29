@@ -1,6 +1,9 @@
 package com.weather.ui.fragments;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +35,7 @@ public class ForecastFragment extends Fragment {
 
     @BindView(R.id.txtTittle) TextView txtTittle;
     @BindView(R.id.txtCityName) TextView txtCityName;
-    RecyclerView recycleyViewForecast;
+    @BindView(R.id.recycleyViewForecast) RecyclerView recycleyViewForecast;
 
     static ForecastFragment instance;
 
@@ -51,8 +54,6 @@ public class ForecastFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
         ButterKnife.bind(this, view);
 
-        recycleyViewForecast = (RecyclerView) view.findViewById(R.id.recycleyViewForecast);
-
         recycleyViewForecast.setHasFixedSize(true);
         recycleyViewForecast.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
@@ -61,15 +62,19 @@ public class ForecastFragment extends Fragment {
             txtTittle.setText("PRONÓSTICO DEL TIEMPO DE 7 DÍAS");
         }
 
-        WeatherApi.getInstance().fetchWeather(
-                view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lat", null),
-                view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lon", null),
-                view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null), isSuccess -> {
-                    if (isSuccess)
-                        setInfoForecast();
-                    else
-                        setInfoForecast();
-                });
+        if(isNetDisponible()) {
+            WeatherApi.getInstance().fetchWeather(
+                    view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lat", null),
+                    view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lon", null),
+                    view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null), isSuccess -> {
+                        if (isSuccess)
+                            setInfoForecast();
+                        else
+                            setInfoForecast();
+                    });
+        } else {
+            setInfoForecast();
+        }
 
         return view;
     }
@@ -91,5 +96,15 @@ public class ForecastFragment extends Fragment {
                 recycleyViewForecast.setAdapter(adapter);
             }
         }
+    }
+
+
+    private boolean isNetDisponible() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
 }
