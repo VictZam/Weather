@@ -23,7 +23,7 @@
 
         <LinearLayout
             android:id="@+id/weatherPanel"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,12 +32,13 @@
 
             <TextView
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:id="@+id/txtCityName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Weather in Mazatlan"
                 android:textColor="@color/cardview_dark_background"
-                android:textSize="24sp"
+                android:textSize="35sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -47,8 +48,8 @@
 
                 <ImageView
                     android:id="@+id/imageViewWeather"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:src="@mipmap/ic_launcher"></ImageView>
 
                 <TextView
@@ -58,10 +59,13 @@
                     android:layout_marginLeft="8dp"
                     android:text="14 C°"
                     android:textColor="@color/cardview_dark_background"
-                    android:textSize="50dp"
-                    android:textStyle="bold" />
+                    android:textSize="24dp"
+                    android:textStyle="bold"/>
+
 
             </LinearLayout>
+
+
 
 
             <TextView
@@ -96,6 +100,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/txtWindText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell"
@@ -118,6 +123,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/txtPreasureText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell"
@@ -140,6 +146,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/txtHumidityText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell"
@@ -162,6 +169,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/txtSensationText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell"
@@ -184,6 +192,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/txtVisibilityText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell"
@@ -206,6 +215,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/txtMaxTempText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell"
@@ -227,6 +237,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/txtMinTempText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell"

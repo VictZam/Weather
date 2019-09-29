@@ -36,30 +36,37 @@ public class slideInfoActivity extends AppIntro {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(AppIntro2Fragment.newInstance("CLIMA",
-                "Sol",
-                R.drawable.sol,
-                Color.parseColor("#51e2b7")));
+        if(getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+            addSlide(AppIntro2Fragment.newInstance("SOL",
+                    "Recuerda beber mucha agua en temporada de calor",
+                    R.drawable.sol,
+                    Color.parseColor("#51e2b7")));
 
-        addSlide(AppIntro2Fragment.newInstance("CLIMA",
-                "Nube",
-                R.drawable.nube,
-                Color.parseColor("#51e2b7")));
+            addSlide(AppIntro2Fragment.newInstance("TORMENTAS ELECTRICAS",
+                    "Desconecta tus aparatos electronicos durante las tormentas electricas",
+                    R.drawable.trueno,
+                    Color.parseColor("#51e2b7")));
 
-        addSlide(AppIntro2Fragment.newInstance("CLIMA",
-                "Noche",
-                R.drawable.noche,
-                Color.parseColor("#51e2b7")));
+            addSlide(AppIntro2Fragment.newInstance("LLUVIA",
+                    "Durante la empoca de lluvia, recuerda comer alimentos ricos en vitamina C",
+                    R.drawable.soltar,
+                    Color.parseColor("#51e2b7")));
+        } else {
+            addSlide(AppIntro2Fragment.newInstance("SUN",
+                    "Remember to drink a lot of water in hot season",
+                    R.drawable.sol,
+                    Color.parseColor("#51e2b7")));
 
-        addSlide(AppIntro2Fragment.newInstance("CLIMA",
-                "Trueno",
-                R.drawable.trueno,
-                Color.parseColor("#51e2b7")));
+            addSlide(AppIntro2Fragment.newInstance("THUNDER STORMS",
+                    "Disconnect your electronic devices during thunderstorms",
+                    R.drawable.trueno,
+                    Color.parseColor("#51e2b7")));
 
-        addSlide(AppIntro2Fragment.newInstance("CLIMA6",
-                "Lluvia",
-                R.drawable.soltar,
-                Color.parseColor("#51e2b7")));
+            addSlide(AppIntro2Fragment.newInstance("RAIN",
+                    "During the rainy season, remember to eat foods rich in vitamin C",
+                    R.drawable.soltar,
+                    Color.parseColor("#51e2b7")));
+        }
 
         showStatusBar(false);
         setBarColor(Color.parseColor("#333639"));

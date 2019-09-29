@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/txtWindText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cell"
@@ -105,6 +106,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/txtPreasureText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cell"
@@ -127,6 +129,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/txtHumidityText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cell"
@@ -149,6 +152,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/txtSensationText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cell"
@@ -171,6 +175,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/txtVisibilityText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cell"
@@ -193,6 +198,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/txtMaxTempText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cell"
@@ -214,6 +220,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/txtMinTempText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cell"

@@ -12,6 +12,8 @@ public class Hourly extends RealmObject {
     RealmList<WeatherIconUrl> weatherIconUrl;
     @SerializedName("weatherDesc")
     RealmList<WeatherDesc> weatherDesc;
+    @SerializedName("lang_es")
+    RealmList<WeatherDescSpanish> weatherDescSpanis;
 
     public RealmList<WeatherIconUrl> getWeatherIconUrl() {
         return weatherIconUrl;
@@ -29,11 +31,20 @@ public class Hourly extends RealmObject {
         this.weatherDesc = weatherDesc;
     }
 
+    public RealmList<WeatherDescSpanish> getWeatherDescSpanis() {
+        return weatherDescSpanis;
+    }
+
+    public void setWeatherDescSpanis(RealmList<WeatherDescSpanish> weatherDescSpanis) {
+        this.weatherDescSpanis = weatherDescSpanis;
+    }
+
     public static void deleteHourly(RealmList<Hourly> hourlies) {
         if (hourlies.size() != 0) {
             for(Hourly hourly : hourlies){
-                new WeatherIconUrl().deleteWeatherIconUrls(hourly.getWeatherIconUrl());
-                new WeatherDesc().deleteWeatherDesc(hourly.getWeatherDesc());
+                WeatherIconUrl.deleteWeatherIconUrls(hourly.getWeatherIconUrl());
+                WeatherDesc.deleteWeatherDesc(hourly.getWeatherDesc());
+                WeatherDescSpanish.deleteWeatherDesc(hourly.getWeatherDescSpanis());
             }
 
             try (Realm realm = Realm.getDefaultInstance()) {

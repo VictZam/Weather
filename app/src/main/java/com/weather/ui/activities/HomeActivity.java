@@ -101,9 +101,16 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     private void setupViewPage(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(TodayWeatherFragment.getInstance(), "Today");
-        adapter.addFragment(ForecastFragment.getInstance(), "7 DAYAS");
-        adapter.addFragment(CitySearchFragment.getInstance(), "Search");
+
+        if(getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+            adapter.addFragment(TodayWeatherFragment.getInstance(), "CLIMA DE HOY");
+            adapter.addFragment(ForecastFragment.getInstance(), "7 DIAS");
+            adapter.addFragment(CitySearchFragment.getInstance(), "BUSQUEDA");
+        } else {
+            adapter.addFragment(TodayWeatherFragment.getInstance(), "TODAY WEATHER");
+            adapter.addFragment(ForecastFragment.getInstance(), "7 DAYS");
+            adapter.addFragment(CitySearchFragment.getInstance(), "SEARCH");
+        }
         viewPager.setAdapter(adapter);
 
     }
@@ -177,7 +184,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
                 Toast.makeText(this, getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Por favor tome ubicacion", Toast.LENGTH_SHORT).show();
+                if(getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+                    Toast.makeText(this, "Por favor tome ubicacion", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Please take location", Toast.LENGTH_SHORT).show();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

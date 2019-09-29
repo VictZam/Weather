@@ -30,6 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class ForecastFragment extends Fragment {
 
+    @BindView(R.id.txtTittle) TextView txtTittle;
     @BindView(R.id.txtCityName) TextView txtCityName;
     RecyclerView recycleyViewForecast;
 
@@ -55,6 +56,10 @@ public class ForecastFragment extends Fragment {
         recycleyViewForecast.setHasFixedSize(true);
         recycleyViewForecast.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
+
+        if(view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+            txtTittle.setText("PRONÓSTICO DEL TIEMPO DE 7 DÍAS");
+        }
 
         WeatherApi.getInstance().fetchWeather(
                 view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("lat", null),

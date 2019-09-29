@@ -54,9 +54,13 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
             holder.txtTemperature.setText(String.format("%.2f °C",weather.get(position).getAvgtempC()));
         }
 
-        holder.txtDate.setText(weather.get(position).getDate());
-        holder.txtDescription.setText(weather.get(position).getHourly().get(0).getWeatherDesc().get(0).getValue());
+        if(context.getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+            holder.txtDescription.setText(weather.get(position).getHourly().get(0).getWeatherDescSpanis().get(0).getValue());
+        } else  {
+            holder.txtDescription.setText(weather.get(position).getHourly().get(0).getWeatherDesc().get(0).getValue());
+        }
 
+        holder.txtDate.setText(weather.get(position).getDate());
     }
 
     @Override

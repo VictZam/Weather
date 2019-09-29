@@ -46,6 +46,14 @@ public class TodayWeatherFragment extends Fragment {
     @BindView(R.id.weatherPanel) LinearLayout weatherPanel;
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
+    @BindView(R.id.txtWindText) TextView txtWindText;
+    @BindView(R.id.txtPreasureText) TextView txtPreasureText;
+    @BindView(R.id.txtHumidityText) TextView txtHumidityText;
+    @BindView(R.id.txtSensationText) TextView txtSensationText;
+    @BindView(R.id.txtVisibilityText) TextView txtVisibilityText;
+    @BindView(R.id.txtMaxTempText) TextView txtMaxTempText;
+    @BindView(R.id.txtMinTempText) TextView txtMinTempText;
+
     static TodayWeatherFragment instance;
 
     public static TodayWeatherFragment getInstance(){
@@ -67,6 +75,14 @@ public class TodayWeatherFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_today_weather, container, false);
         ButterKnife.bind(this, view);
         setCurrenWeatherData(view);
+
+        if(view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+            txtWindText.setText("Viento");
+            txtPreasureText.setText("Presion");
+            txtHumidityText.setText("Humedad");
+            txtSensationText.setText("Sensacion");
+            txtVisibilityText.setText("Visibilidad");
+        }
 
         return view;
     }
@@ -111,9 +127,15 @@ public class TodayWeatherFragment extends Fragment {
                     txtMinTemp.setText(String.format("%.2f °C", weatherLocation.getWeather().get(0).getMintempC()));
                 }
 
+                if(view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+                    txtDescription.setText(String.format("%s", weatherLocation.getWeather().get(0).getHourly().get(0).getWeatherDescSpanis().get(0).getValue()));
+                    txtDateTime.setText(String.format("Fecha: %s ", weatherLocation.getWeather().get(0).getDate()));
+                } else{
+                    txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
+                    txtDateTime.setText(String.format("Date: %s ", weatherLocation.getWeather().get(0).getDate()));
+                }
+
                 txtCityName.setText(String.format("%s", weatherLocation.getLocality()));
-                txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
-                txtDateTime.setText(String.format("Date: %s ", weatherLocation.getWeather().get(0).getDate()));
                 txtWind.setText(String.format("%.2f Km", weatherLocation.getCurrentCondition().get(0).getWindspeedKmph()));
                 txtPreassure.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getPressure()));
                 txtHumidity.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getHumidity()));

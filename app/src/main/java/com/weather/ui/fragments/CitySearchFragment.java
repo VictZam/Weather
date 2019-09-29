@@ -61,6 +61,13 @@ public class CitySearchFragment extends Fragment {
     @BindView(R.id.weatherPanel) LinearLayout weatherPanel;
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
+    @BindView(R.id.txtWindText) TextView txtWindText;
+    @BindView(R.id.txtPreasureText) TextView txtPreasureText;
+    @BindView(R.id.txtHumidityText) TextView txtHumidityText;
+    @BindView(R.id.txtSensationText) TextView txtSensationText;
+    @BindView(R.id.txtVisibilityText) TextView txtVisibilityText;
+    @BindView(R.id.txtMaxTempText) TextView txtMaxTempText;
+    @BindView(R.id.txtMinTempText) TextView txtMinTempText;
 
     static CitySearchFragment instance;
 
@@ -80,6 +87,14 @@ public class CitySearchFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         citiesSearchBar.setEnabled(false);
+
+        if(view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+            txtWindText.setText("Viento");
+            txtPreasureText.setText("Presion");
+            txtHumidityText.setText("Humedad");
+            txtSensationText.setText("Sensacion");
+            txtVisibilityText.setText("Visibilidad");
+        }
 
         new LoadCities().execute();
 
@@ -168,7 +183,11 @@ public class CitySearchFragment extends Fragment {
             }
             else {
                 setWeatherInfo(cityName);
-                Toast.makeText(getContext(), "Sin conexion", Toast.LENGTH_SHORT).show();
+                if(getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+                    Toast.makeText(getContext(), "Sin conexion", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Without connection", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -196,9 +215,15 @@ public class CitySearchFragment extends Fragment {
                     txtMinTemp.setText(String.format("%.2f °C", weatherLocation.getWeather().get(0).getMintempC()));
                 }
 
+                if(getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+                    txtDescription.setText(String.format("%s", weatherLocation.getWeather().get(0).getHourly().get(0).getWeatherDescSpanis().get(0).getValue()));
+                    txtDateTime.setText(String.format("Fecha: %s ", weatherLocation.getWeather().get(0).getDate()));
+                } else{
+                    txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
+                    txtDateTime.setText(String.format("Date: %s ", weatherLocation.getWeather().get(0).getDate()));
+                }
+
                 txtCityName.setText(String.format("%s", weatherLocation.getLocality()));
-                txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
-                txtDateTime.setText(String.format("Date: %s ", weatherLocation.getWeather().get(0).getDate()));
                 txtWind.setText(String.format("%.2f Km", weatherLocation.getCurrentCondition().get(0).getWindspeedKmph()));
                 txtPreassure.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getPressure()));
                 txtHumidity.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getHumidity()));
@@ -209,7 +234,11 @@ public class CitySearchFragment extends Fragment {
                         .into(imageWeather);
 
             } else {
-                Toast.makeText(getContext(), "No hay datos", Toast.LENGTH_SHORT).show();
+                if(getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")) {
+                    Toast.makeText(getContext(), "No hay datos", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "No data", Toast.LENGTH_SHORT).show();
+                }
                 weatherPanel.setVisibility(View.GONE);
             }
         }
