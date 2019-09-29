@@ -31,7 +31,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class ForecastFragment extends Fragment {
 
     @BindView(R.id.txtCityName) TextView txtCityName;
-    @BindView(R.id.txtGeoCoord) TextView txtGeoCord;
     RecyclerView recycleyViewForecast;
 
     static ForecastFragment instance;
@@ -78,9 +77,6 @@ public class ForecastFragment extends Fragment {
 
             if (weatherLocation != null) {
                 txtCityName.setText(getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("locality", null));
-                txtGeoCord.setText(String.format("%s", weatherLocation.getRequest().get(0)
-                        .getQuery()).replace("and", ",").replace("Lat",
-                        "").replace("Lon", ""));
 
                 ArrayList<Weather> weathers = new ArrayList<>();
                 weathers.addAll(realm.copyFromRealm(weatherLocation.getWeather()));

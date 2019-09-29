@@ -197,6 +197,7 @@ public class SettingsActivity extends AppCompatActivity {
             editor.putBoolean("setting", true);
             editor.apply();
             this.startActivity(new Intent(this, slideInfoActivity.class));
+            finish();
         } else {
             if(getSharedPreferences("preferences", MODE_PRIVATE).getString("language", "es").equals("es")){
                 Snackbar.make(coordinatorLayout, "Permisos requeridos para poder continuar", Snackbar.LENGTH_LONG)

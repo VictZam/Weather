@@ -25,21 +25,13 @@
 
         <TextView
             android:id="@+id/txtCityName"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:text="WEATHER IN MAZATLAN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/txtGeoCoord"
-            android:textSize="18sp"
-            android:textStyle="italic"
-            android:textColor="@color/black"
-            android:text="[35, 42]"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

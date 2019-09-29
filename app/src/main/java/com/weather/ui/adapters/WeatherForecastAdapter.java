@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecastAdapter.MyViewHolder> {
 
     Context context;
@@ -45,8 +47,14 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
                 .load(weather.get(position).getHourly().get(0).getWeatherIconUrl().get(0).getValue())
                 .into(holder.imageViewWeather);
 
+
+        if(context.getSharedPreferences("preferences", MODE_PRIVATE).getString("degrees", "c") == "f"){
+            holder.txtTemperature.setText(String.format("%.2f °F",weather.get(position).getAvgtempF()));
+        } else {
+            holder.txtTemperature.setText(String.format("%.2f °C",weather.get(position).getAvgtempC()));
+        }
+
         holder.txtDate.setText(weather.get(position).getDate());
-        holder.txtTemperature.setText(String.format("%.2f °Ce",weather.get(position).getAvgtempC()));
         holder.txtDescription.setText(weather.get(position).getHourly().get(0).getWeatherDesc().get(0).getValue());
 
     }

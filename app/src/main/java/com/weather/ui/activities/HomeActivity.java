@@ -2,6 +2,7 @@ package com.weather.ui.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -11,6 +12,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +38,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
     private androidx.appcompat.widget.Toolbar toolbar;
@@ -42,6 +49,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private ViewPager viewPager;
 
     private CoordinatorLayout coordinatorLayout;
+
+    @BindView(R.id.buttonSetting) Button buttonSetting;
 
     LocationManager locationManager;
     String provider;
@@ -51,12 +60,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        ButterKnife.bind(this);
+
         coordinatorLayout = (CoordinatorLayout)findViewById(R.id.rootView);
 
-        toolbar = (androidx.appcompat.widget.Toolbar)findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         validatePermition();
 
@@ -96,6 +108,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     }
 
+    
     @Override
     protected void onPause() {
         super.onPause();
@@ -184,6 +197,17 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+
+    @OnClick(R.id.buttonSetting)
+    public void OnClickSetting(View view) {
+        SharedPreferences sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("setting", false);
+        editor.apply();
+
+        this.startActivity(new Intent(this, SettingsActivity.class));
+        finish();
     }
 
 }

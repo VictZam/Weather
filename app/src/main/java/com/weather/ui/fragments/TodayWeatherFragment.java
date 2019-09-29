@@ -41,7 +41,8 @@ public class TodayWeatherFragment extends Fragment {
     @BindView(R.id.txtDescription) TextView txtDescription;
     @BindView(R.id.txtDateTime) TextView txtDateTime;
     @BindView(R.id.txtWind) TextView txtWind;
-    @BindView(R.id.txtGeoCoord) TextView txtGeoCoord;
+    @BindView(R.id.txtMaxTemp) TextView txtMaxTemp;
+    @BindView(R.id.txtMinTemp) TextView txtMinTemp;
     @BindView(R.id.weatherPanel) LinearLayout weatherPanel;
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
@@ -98,16 +99,25 @@ public class TodayWeatherFragment extends Fragment {
                 progressBar.setVisibility(View.INVISIBLE);
                 weatherPanel.setVisibility(View.VISIBLE);
 
+                if(view.getContext().getSharedPreferences("preferences", MODE_PRIVATE).getString("degrees", "c") == "f"){
+                    txtTemperature.setText(String.format("%.2f °F", weatherLocation.getCurrentCondition().get(0).getFarenheit()));
+                    txtSensation.setText(String.format("%.2f °F", weatherLocation.getCurrentCondition().get(0).getFeelsLikeF()));
+                    txtMaxTemp.setText(String.format("%.2f °F", weatherLocation.getWeather().get(0).getMaxtempF()));
+                    txtMinTemp.setText(String.format("%.2f °F", weatherLocation.getWeather().get(0).getMintempF()));
+                } else {
+                    txtTemperature.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getCelcius()));
+                    txtSensation.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getFeelsLikeC()));
+                    txtMaxTemp.setText(String.format("%.2f °C", weatherLocation.getWeather().get(0).getMaxtempC()));
+                    txtMinTemp.setText(String.format("%.2f °C", weatherLocation.getWeather().get(0).getMintempC()));
+                }
+
                 txtCityName.setText(String.format("%s", weatherLocation.getLocality()));
-                txtTemperature.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getCelcius()));
                 txtDescription.setText(String.format("%s", weatherLocation.getCurrentCondition().get(0).getWeatherDesc().get(0).getValue()));
                 txtDateTime.setText(String.format("Date: %s ", weatherLocation.getWeather().get(0).getDate()));
                 txtWind.setText(String.format("%.2f Km", weatherLocation.getCurrentCondition().get(0).getWindspeedKmph()));
                 txtPreassure.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getPressure()));
                 txtHumidity.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getHumidity()));
-                txtSensation.setText(String.format("%.2f °C", weatherLocation.getCurrentCondition().get(0).getFeelsLikeC()));
                 txtVisibility.setText(String.format("%.2f", weatherLocation.getCurrentCondition().get(0).getVisibility()));
-                txtGeoCoord.setText(String.format("%s", weatherLocation.getRequest().get(0).getQuery()).replace("and",",").replace("Lat", "").replace("Lon", ""));
 
                 Picasso.with(view.getContext())
                         .load(weatherLocation.getCurrentCondition().get(0).getWeatherIconUrl().get(0).getValue())
